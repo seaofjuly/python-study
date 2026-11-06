@@ -50,14 +50,75 @@ git version 2.56.0.windows.1
 
 ## 4. 개발 진행 기록
 
+
 ### 개발 환경 준비
 
-- [x] Python 설치 및 버전 확인
-- [x] Git 설치 및 버전 확인
-- [x] 프로젝트 작업 폴더 준비
-- [ ] Git 사용자 정보 확인
-- [ ] GitHub 저장소 생성
-- [ ] Git 저장소 초기화 및 첫 커밋
+- [x] Python 3.14.10 설치 및 버전 확인
+- [x] Git 2.56.0 설치 및 버전 확인
+- [x] VS Code 프로젝트 폴더 `python-study` 준비
+- [x] Git 사용자 이름 확인
+- [x] `README.md` 생성 및 개발 환경 기록
+- [x] 개발 환경 스크린샷 저장
+- [x] `.gitignore` 파일 생성
+- [x] `git init`으로 로컬 저장소 초기화
+- [x] 기본 브랜치를 `master`에서 `main`으로 변경
+- [x] `git status`로 저장소 상태 확인
+- [x] `git add`로 초기 파일 등록
+- [x] 첫 번째 Git 커밋 완료
+- [ ] GitHub 원격 저장소 생성
+- [ ] 첫 번째 `git push` 실행
+
+### 첫 번째 Git 커밋 기록
+
+- 커밋 메시지: `Chore: initialize Python quiz project`
+- 커밋 ID: `93e2df3`
+- 브랜치: `main`
+- 기록된 파일: `.gitignore`, `README.md`, 개발 환경 스크린샷
+- 현재 커밋 수: 1개 (과제 최소 요구 10개)
+
+
+### Git 명령어 학습 기록
+
+| 명령어 | 역할 |
+|---|---|
+| `git init` | 로컬 Git 저장소 생성 |
+| `git status` | 파일과 저장소 상태 확인 |
+| `git branch -m main` | 현재 브랜치 이름을 main으로 변경 |
+| `git add` | 다음 커밋에 포함할 파일 준비 |
+| `git commit -m` | 변경 내용을 설명과 함께 기록 |
+
+### Git 명령어 실행 화면
+
+#### 1. Git 저장소 초기화
+
+`git init` 명령어로 로컬 저장소를 생성했습니다.
+
+![Git 저장소 초기화](docs/screenshots/git%20init.png)
+
+#### 2. Git 상태 확인
+
+`git status` 명령어로 파일 상태를 확인했습니다.
+
+![Git 상태 확인](docs/screenshots/git_status.png)
+
+#### 3. 브랜치 이름 변경
+
+`git branch -m main` 명령어로 브랜치 이름을 변경했습니다.
+
+![브랜치 변경](docs/screenshots/master_to_main.png)
+
+#### 4. Git 파일 등록
+
+`git add` 명령어로 파일을 커밋할 준비를 했습니다.
+
+![Git 파일 등록](docs/screenshots/git_add.png)
+
+#### 5. 첫 번째 커밋
+
+`git commit` 명령어로 첫 번째 변경 이력을 기록했습니다.
+
+![첫 번째 커밋](docs/screenshots/git_commit.png)
+
 
 ## 5. 퀴즈 주제 및 선정 이유
 
