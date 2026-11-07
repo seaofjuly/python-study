@@ -171,7 +171,7 @@ git version 2.56.0.windows.1
 
 ![메뉴 5개 출력](docs/screenshots/quiz_menu_display.png)
 
-![입력값 확인 연습](docs/screenshots/quiz_input_test.png.png)
+![입력값 확인 연습](docs/screenshots/quiz_input_test.png)
 
 ##### 8-2. Python 실행과 변수 학습
 
@@ -237,8 +237,6 @@ git version 2.56.0.windows.1
 `git push` 명령어로 GitHub 원격 저장소에 업로드했습니다.
 
 ![GitHub 업로드 성공](docs/screenshots/git_push_quiz_menu.png)
-
-
 
 
 
