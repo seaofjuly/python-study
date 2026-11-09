@@ -432,6 +432,53 @@ Python의 `dict`, `list`와 모양이 비슷해서 읽고 쓰기 쉽습니다.
 Python 퀴즈 게임의 개발 과정과 실행 결과는
 **4. 개발 진행 기록**에 정리했습니다.
 
+### 퀴즈 게임 실행 결과
+
+`py quiz.py`로 실행한 화면입니다.
+
+#### 메뉴 화면
+
+![메뉴 화면](docs/screenshots/menu.png)
+
+#### 퀴즈 추가
+
+![퀴즈 추가 시작](docs/screenshots/add_quiz_start.png)
+
+문제, 선택지 4개, 정답 번호를 입력하면 퀴즈가 추가됩니다.
+
+![퀴즈 추가 완료](docs/screenshots/add_quiz.png)
+
+#### 퀴즈 목록
+
+추가한 퀴즈가 목록에 반영되어 총 6개가 표시됩니다.
+
+![퀴즈 목록](docs/screenshots/list.png)
+
+#### 퀴즈 풀기
+
+![퀴즈 풀기 시작과 정답](docs/screenshots/play_start.png)
+
+![오답 안내](docs/screenshots/play.png)
+
+범위 밖 숫자(`9`)를 입력하면 안내 메시지를 출력하고 다시 입력받습니다.
+
+![잘못된 입력 처리](docs/screenshots/invalid_input.png)
+
+모든 문제를 풀면 결과와 점수가 표시되고, 최고 점수가 갱신됩니다.
+
+![퀴즈 결과](docs/screenshots/result.png)
+
+#### 점수 확인
+
+![점수 확인](docs/screenshots/score.png)
+
+#### Git 커밋 기록
+
+`git log --oneline --graph`로 확인한 커밋 기록입니다.
+`feature/play-quiz` 브랜치를 만들어 작업한 뒤 `main`에 병합했습니다.
+
+![Git 커밋 그래프](docs/screenshots/git_log_graph.png)
+
 ### 현재까지 확인한 내용
 
 - Python 및 Git 개발 환경 설정
