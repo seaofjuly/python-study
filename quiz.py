@@ -1,4 +1,5 @@
 LINE = "=" * 40
+SUB_LINE = "-" * 40
 
 
 class Quiz:
@@ -76,6 +77,34 @@ def show_menu():
     print(LINE)
 
 
+def play_quiz(quizzes):
+    """모든 퀴즈를 순서대로 출제하고 결과를 보여준다."""
+    if not quizzes:
+        print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요.")
+        return
+
+    total = len(quizzes)
+    print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
+    correct = 0
+    for index, quiz in enumerate(quizzes, start=1):
+        print()
+        print(SUB_LINE)
+        print(f"[문제 {index}]")
+        quiz.show()
+        user_answer = read_number("정답 입력: ", 1, 4)
+        if quiz.is_correct(user_answer):
+            correct += 1
+            print("✅ 정답입니다!")
+        else:
+            print(f"❌ 오답입니다. 정답은 {quiz.answer}번입니다.")
+
+    score = correct * 100 // total
+    print()
+    print(LINE)
+    print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+    print(LINE)
+
+
 def main():
     quizzes = default_quizzes()
     print(f"📂 기본 퀴즈 {len(quizzes)}개를 준비했습니다.")
@@ -83,7 +112,7 @@ def main():
         show_menu()
         choice = read_number("선택: ", 1, 5)
         if choice == 1:
-            print("퀴즈를 시작합니다!")
+            play_quiz(quizzes)
         elif choice == 2:
             print("퀴즈를 추가합니다!")
         elif choice == 3:
