@@ -44,7 +44,14 @@ git --version
 ```text
 git version 2.56.0.windows.1
 ```
+
 ![Python 및 Git 버전 확인](docs/screenshots/py_version_git_version.png)
+
+### Git 설정 확인
+
+`git config`로 커밋에 기록되는 사용자 이름과 이메일을 확인했습니다.
+
+![Git 설정 확인](docs/screenshots/git%20config%20user.png)
 
 
 
