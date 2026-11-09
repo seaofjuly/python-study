@@ -471,8 +471,11 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 
 ##### 2. 복제본에서 수정 후 commit, push
 
-복제한 폴더의 `README.md`에 한 줄을 추가하고
-`git add`, `git commit`, `git push`로 GitHub에 올렸습니다.
+복제한 폴더(`python-study-clone`)의 `README.md`에 한 줄을 추가했습니다.
+
+![복제본에서 추가한 줄](docs/screenshots/clone_added_line.png)
+
+그다음 `git add`, `git commit`, `git push`로 GitHub에 올렸습니다.
 
 ![복제본에서 commit, push](docs/screenshots/clone_push.png)
 
