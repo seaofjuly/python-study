@@ -67,36 +67,6 @@ git version 2.56.0.windows.1
 - [x] 첫 번째 Git 커밋 완료
 - [x] GitHub 원격 저장소 생성
 - [x] 첫 번째 `git push` 실행
-
-### 첫 번째 Git 커밋 기록
-
-- 커밋 메시지: `Chore: initialize Python quiz project`
-- 커밋 ID: `93e2df3`
-- 브랜치: `main`
-- 기록된 파일: `.gitignore`, `README.md`, 개발 환경 스크린샷
-- 현재 커밋 수: 1개 (과제 최소 요구 10개)
-
-
-### 두 번째 Git 커밋 기록
-
-- 커밋 메시지: `Docs: add Git learning notes and screenshots`
-- 커밋 ID: `2d3aee1`
-- 작업 내용: Git 명령어 학습 기록과 실행 스크린샷 추가
-- 브랜치: `main`
-
-### 세 번째 Git 커밋 기록
-
-- 커밋 메시지: `Feat: add quiz menu`
-- 커밋 ID: `7257b23`
-- 작업 내용: Python 퀴즈 게임의 기본 메뉴 구현
-- 구현 내용:
-  - 1~5번 메뉴 화면 출력
-  - `input()`으로 사용자 메뉴 번호 입력받기
-  - `if`, `elif`로 선택한 메뉴 구분하기
-  - `else`로 잘못된 메뉴 번호 안내하기
-- 실행 확인: 5번과 9번 입력 테스트 완료
-- 브랜치: `main`
-- 현재 커밋 수: 3개 (과제 최소 요구 10개)
   
 ### Git 명령어 학습 기록
 
@@ -508,22 +478,25 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 
 ![원래 폴더에서 pull](docs/screenshots/clone_pull.png)
 
-### 현재까지 확인한 내용
+### 최종 확인 내용
 
 - Python 및 Git 개발 환경 설정
 - Git 저장소 생성과 GitHub 연결
-- Python 퀴즈 게임 메뉴 작성
-- 사용자 입력 및 조건문 학습
-- 1~5번 메뉴 실행 테스트
-- 잘못된 메뉴 번호 입력 처리
-- Git 커밋 및 GitHub 업로드
+- 퀴즈 풀기, 추가, 목록, 점수 확인 기능 구현
+- `Quiz`, `QuizGame` 클래스로 코드 구조 분리
+- `state.json`으로 퀴즈와 최고 점수 저장 및 불러오기
+- 잘못된 입력, `Ctrl+C`, 파일 손상 등 예외 처리
+- `feature/play-quiz` 브랜치 작업 후 `main`에 병합
+- `clone`과 `pull` 실습
+- (보너스) 랜덤 출제 구현
 
-각 단계의 실행 화면은 `docs/screenshots/` 폴더에
-저장했으며 README에서 확인할 수 있습니다.
-
-앞으로 새로운 기능을 구현할 때마다
-개발 과정과 실행 결과를 추가할 예정입니다.
-
+각 단계의 실행 화면은 `docs/screenshots/` 폴더에 저장했으며
+README에서 확인할 수 있습니다.
 
 
-clone 실습: 복제본에서 수정한 내용입니다.
+### clone 실습 기록
+
+> clone 실습: 복제본에서 수정한 내용입니다.
+
+위 문장은 복제본(`python-study-clone`)에서 추가한 뒤
+`pull`로 원래 폴더에 가져온 내용입니다.
