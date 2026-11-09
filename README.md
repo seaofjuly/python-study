@@ -479,6 +479,33 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 
 ![Git 커밋 그래프](docs/screenshots/git_log_graph.png)
 
+#### Git clone / pull 실습
+
+퀴즈 게임 개발을 마친 뒤 `clone`과 `pull`을 실습했습니다.
+
+##### 1. clone: 저장소 복제
+
+`git clone`으로 GitHub 저장소를 `python-study-clone` 폴더에 복제했습니다.
+원래 작업 폴더(`python-study`) 옆에 복제 폴더가 생겼습니다.
+
+![clone으로 복제한 폴더](docs/screenshots/clone_folders.png)
+
+##### 2. 복제본에서 수정 후 commit, push
+
+복제한 폴더의 `README.md`에 한 줄을 추가하고
+`git add`, `git commit`, `git push`로 GitHub에 올렸습니다.
+
+![복제본에서 commit, push](docs/screenshots/clone_push.png)
+
+##### 3. 원래 폴더에서 pull
+
+원래 작업 폴더로 돌아와 `git pull`로 변경사항을 가져왔습니다.
+`Fast-forward`로 `README.md`가 갱신되었고,
+`git log --oneline -3`에서 복제본에서 만든 커밋
+`Docs: add clone practice note`를 확인했습니다.
+
+![원래 폴더에서 pull](docs/screenshots/clone_pull.png)
+
 ### 현재까지 확인한 내용
 
 - Python 및 Git 개발 환경 설정
