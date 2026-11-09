@@ -509,6 +509,12 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 
 ![점수 확인](docs/screenshots/score.png)
 
+#### 재실행 후 데이터 유지
+
+프로그램을 종료한 뒤 다시 실행해도 `state.json`에서 퀴즈와 최고 점수를 불러옵니다.
+
+![재실행 후 데이터 유지](docs/screenshots/restart_persist.png)
+
 #### Git 커밋 기록
 
 `git log --oneline --graph`로 확인한 커밋 기록입니다.
