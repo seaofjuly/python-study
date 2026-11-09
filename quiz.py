@@ -1,5 +1,6 @@
 import json
 import random
+import shutil
 from pathlib import Path
 
 # 데이터는 프로젝트 루트(이 파일이 있는 폴더)의 state.json에 UTF-8로 저장한다.
@@ -139,11 +140,26 @@ class QuizGame:
             )
         except (OSError, ValueError, KeyError, TypeError, AttributeError):
             print("⚠️ 데이터 파일이 손상되어 기본 퀴즈 데이터로 초기화합니다.")
+            self.backup_corrupted_file()  # 덮어쓰기 전에 손상된 파일을 보존한다.
             self.quizzes = default_quizzes()
             self.best_score = None
             self.best_correct = 0
             self.best_total = 0
             self.save()
+
+    def backup_corrupted_file(self):
+        """손상된 state.json을 state.json.bak으로 복사해 보존한다.
+
+        초기화하면 state.json이 덮어써지므로, 그 전에 호출해서
+        사용자가 나중에 .bak 파일을 열어 직접 복구할 수 있게 한다.
+        (이미 .bak이 있으면 가장 최근에 손상된 파일로 덮어쓴다.)
+        """
+        backup = STATE_FILE.with_name(STATE_FILE.name + ".bak")
+        try:
+            shutil.copy2(STATE_FILE, backup)
+            print(f"💾 손상된 파일을 {backup.name}으로 백업했습니다.")
+        except OSError:
+            print("⚠️ 손상된 파일을 백업하지 못했습니다.")
 
     def save(self):
         """퀴즈와 최고 점수를 state.json에 저장한다."""

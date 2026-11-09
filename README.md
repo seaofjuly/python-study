@@ -313,7 +313,7 @@ Python에서 문자열 자료형의 이름은?
 - 입력 앞뒤 공백을 제거합니다. (예: ` 1 `)
 - 빈 입력, 숫자가 아닌 입력(`abc`), 범위 밖 숫자(`9`, `0`)는 안내 메시지 후 다시 입력받습니다.
 - `Ctrl+C`나 입력 종료(`EOFError`)가 발생해도 안내 메시지를 출력하고, 저장한 뒤 안전하게 종료합니다.
-- `state.json`이 없으면 기본 퀴즈로 시작하고, 손상되었으면 안내 후 기본 퀴즈로 초기화합니다.
+- `state.json`이 없으면 기본 퀴즈로 시작하고, 손상되었으면 안내 후 `state.json.bak`으로 백업하고 기본 퀴즈로 초기화합니다.
 
 
 ## 8. 프로젝트 파일 구조
@@ -337,10 +337,20 @@ python-study/
 |---|---|
 | `quiz.py` | 퀴즈 게임 실행 코드 (`Quiz`, `QuizGame` 클래스) |
 | `state.json` | 퀴즈 목록과 최고 점수 저장 파일 (UTF-8) |
+| `state.json.bak` | 손상된 `state.json`의 백업 (손상이 감지될 때만 생성) |
 | `README.md` | 프로젝트 설명과 개발 학습 기록 |
 | `MISSION.md` | 미션 요구 사항 정리 |
 | `.gitignore` | Git에서 추적하지 않을 파일 설정 |
 | `docs/screenshots/` | 개발 과정 및 실행 결과 스크린샷 보관 |
+
+### 클래스를 사용한 이유
+
+퀴즈 한 문제의 데이터(`question`, `choices`, `answer`)와 동작(`show()`, `is_correct()`)을 `Quiz`로 묶고,
+게임 전체의 상태(퀴즈 목록, 최고 점수)와 기능은 `QuizGame`으로 묶었습니다.
+함수만 사용하면 `quizzes`, `best_score` 같은 값을 여러 함수에 계속 넘기거나 전역 변수로 공유해야 해서
+코드가 커질수록 값이 어디서 바뀌는지 추적하기 어렵지만, 클래스는 데이터와 기능을 한곳에 모아 역할이 분명하고
+`Quiz`를 여러 개 만들어 재사용할 수 있습니다.
+대신 작은 프로그램에서는 `self`와 클래스 구조 때문에 함수만 쓸 때보다 코드가 조금 길어지는 단점이 있습니다.
 
 ### 코드 구조
 
@@ -352,6 +362,7 @@ python-study/
 | `QuizGame` | 게임 전체 관리 (퀴즈 목록, 최고 점수) |
 | `QuizGame.read_number()` | 숫자 입력 검증 (공백, 변환 실패, 범위, 빈 입력) |
 | `QuizGame.load()` / `save()` | `state.json` 불러오기 / 저장 |
+| `QuizGame.backup_corrupted_file()` | 손상된 `state.json`을 `state.json.bak`으로 백업 |
 | `QuizGame.play()` | 퀴즈 풀기와 점수 계산 |
 | `QuizGame.add_quiz()` | 퀴즈 추가 |
 | `QuizGame.show_list()` | 퀴즈 목록 출력 |
@@ -368,7 +379,7 @@ python-study/
 | 선택지 개수 변경 (4개 → N개) | `Quiz.from_dict()`(선택지 개수, 정답 범위 검사), `QuizGame.add_quiz()`(선택지 입력 반복, 정답 범위), `QuizGame.play()`(정답 입력 범위), `default_quizzes()`, README 스키마 |
 | 퀴즈에 속성 추가 (힌트, 분류 등) | `Quiz.__init__()`, `Quiz.to_dict()`, `Quiz.from_dict()`, `Quiz.show()`, `QuizGame.add_quiz()`, `default_quizzes()`, `state.json` 스키마 |
 | 점수 계산 방식 변경 | `QuizGame.play()`(점수 계산, 최고 점수 갱신), `QuizGame.show_score()`, `QuizGame.best_score_text()`, `QuizGame.load()`/`save()`(`best_*` 값) |
-| 저장 방식 변경 (JSON → DB 등) | `STATE_FILE`, `QuizGame.load()`, `QuizGame.save()` (다른 메서드는 그대로 사용 가능) |
+| 저장 방식 변경 (JSON → DB 등) | `STATE_FILE`, `QuizGame.load()`, `QuizGame.save()`, `QuizGame.backup_corrupted_file()` (다른 메서드는 그대로 사용 가능) |
 | 메뉴 항목 추가, 변경 | `QuizGame.show_menu()`, `QuizGame.run()`(메뉴 번호 범위와 분기), 새 기능 메서드 |
 | 입력 검증 규칙 변경 | `QuizGame.read_number()`, `QuizGame.read_text()` |
 | 기본 퀴즈 내용 변경 | `default_quizzes()` |
@@ -420,7 +431,14 @@ Python의 `dict`, `list`와 모양이 비슷해서 읽고 쓰기 쉽습니다.
 ### 예외 상황
 
 - 파일이 없으면(첫 실행) 기본 퀴즈 5개로 시작합니다.
-- 파일이 손상되었거나 형식이 맞지 않으면 안내 메시지를 출력하고 기본 퀴즈로 초기화합니다.
+- 파일이 손상되었거나 형식이 맞지 않으면 안내 메시지를 출력하고, 손상된 파일을 `state.json.bak`으로 백업한 뒤 기본 퀴즈로 초기화합니다.
+
+### 손상된 파일 복구
+
+초기화하면 `state.json`이 새 내용으로 바뀌지만, 손상된 원본은 같은 폴더의 `state.json.bak`에 남아 있습니다.
+`state.json.bak`을 열어 내용을 확인하고 고친 뒤 파일 이름을 `state.json`으로 바꾸면 이전 데이터를 되살릴 수 있습니다.
+백업은 손상이 감지될 때마다 만들어지며, 이미 `.bak`이 있으면 가장 최근에 손상된 파일로 덮어씁니다.
+`state.json.bak`도 `.gitignore`에 등록해서 Git에는 올리지 않습니다.
 
 ### 한계와 대용량 데이터 고려사항
 
@@ -430,7 +448,7 @@ Python의 `dict`, `list`와 모양이 비슷해서 읽고 쓰기 쉽습니다.
 - **전체를 읽고 전체를 다시 씁니다.** `load()`는 `json.load()`로 파일 전체를 메모리에 올리고,
   `save()`는 퀴즈를 하나만 추가해도 `json.dump()`로 파일 전체를 다시 씁니다.
   퀴즈가 N개이면 읽기, 쓰기 시간과 메모리 사용량이 N에 비례해 커집니다.
-- **저장 도중 종료되면 파일이 손상될 수 있습니다.** 현재는 손상된 파일을 감지하면 기본 퀴즈로 초기화합니다.
+- **저장 도중 종료되면 파일이 손상될 수 있습니다.** 현재는 손상된 파일을 감지하면 `state.json.bak`으로 백업한 뒤 기본 퀴즈로 초기화합니다.
 - **동시에 여러 곳에서 쓰면 덮어쓸 수 있습니다.** 이 프로그램은 한 번에 하나만 실행하는 것을 전제로 합니다.
 
 데이터가 수만 건 이상으로 커지면 다음 방법을 고려할 수 있습니다.
@@ -521,6 +539,15 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 | README, 스크린샷 | `66428f1`, `da3e418` | `Docs: ...` |
 | 보너스: 랜덤 출제 | `ea7f760` | `Feat: add random quiz order` |
 | clone, pull 실습 | `16c2ec0`, `8bea294` | `Docs: ...` |
+
+#### 브랜치를 나눈 이유와 병합
+
+`main`은 항상 실행되는 안정된 상태로 두고, 퀴즈 풀기 기능은 `feature/play-quiz` 브랜치에서 따로 작업했습니다.
+개발 중인 코드가 `main`에 섞이지 않고, 문제가 생기면 그 브랜치만 버릴 수 있습니다. (기능 격리)
+기능을 완성하고 실행을 확인한 뒤 `git merge --no-ff`로 `main`에 합쳐서, 기능 단위의 이력이 그래프에 남게 했습니다.
+같은 파일의 같은 부분을 서로 다른 브랜치에서 고치면 병합할 때 **충돌**이 나서 직접 비교해 풀어야 하고,
+팀 작업에서는 병합하기 전에 Pull Request와 코드 리뷰로 변경 내용을 확인합니다.
+이번 프로젝트는 혼자 작업해서 충돌은 발생하지 않았습니다.
 
 #### Git clone / pull 실습
 
