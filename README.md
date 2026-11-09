@@ -53,6 +53,13 @@ git version 2.56.0.windows.1
 
 ![Git 설정 확인](docs/screenshots/git%20config%20user.png)
 
+### VS Code 개발 화면
+
+VS Code에서 `python-study` 폴더를 열고 `quiz.py`를 작성했습니다.
+왼쪽은 프로젝트 파일 목록, 가운데는 코드, 아래쪽은 터미널입니다.
+
+![VS Code 개발 화면](docs/screenshots/dev_vscode.png)
+
 
 
 ## 4. 개발 진행 기록
