@@ -22,6 +22,29 @@ class Quiz:
         return user_answer == self.answer
 
 
+def default_quizzes():
+    """기본 퀴즈 (주제: 파이썬 기초)."""
+    return [
+        Quiz("Python에서 문자열 자료형의 이름은?", ["int", "str", "bool", "list"], 2),
+        Quiz("값이 바뀔 수 있는 순서 있는 자료형은?", ["tuple", "str", "list", "int"], 3),
+        Quiz(
+            "키(key)와 값(value)을 짝지어 저장하는 자료형은?",
+            ["list", "dict", "bool", "str"],
+            2,
+        ),
+        Quiz(
+            "클래스에서 객체가 만들어질 때 자동으로 호출되는 메서드는?",
+            ["__str__", "__call__", "__init__", "__del__"],
+            3,
+        ),
+        Quiz(
+            "조건이 참인 동안 계속 반복하는 문법은?",
+            ["if", "while", "def", "import"],
+            2,
+        ),
+    ]
+
+
 def read_number(prompt, minimum, maximum):
     """범위 안의 숫자가 입력될 때까지 다시 입력받는다."""
     while True:
@@ -54,6 +77,8 @@ def show_menu():
 
 
 def main():
+    quizzes = default_quizzes()
+    print(f"📂 기본 퀴즈 {len(quizzes)}개를 준비했습니다.")
     while True:
         show_menu()
         choice = read_number("선택: ", 1, 5)
