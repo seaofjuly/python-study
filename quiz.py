@@ -1,4 +1,5 @@
 import json
+import random
 from pathlib import Path
 
 # 데이터는 프로젝트 루트(이 파일이 있는 폴더)의 state.json에 UTF-8로 저장한다.
@@ -182,10 +183,14 @@ class QuizGame:
             print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해 주세요.")
             return
 
-        total = len(self.quizzes)
-        print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
+        # 목록의 원래 순서는 그대로 두고, 복사본을 섞어서 출제한다.
+        questions = self.quizzes[:]
+        random.shuffle(questions)
+
+        total = len(questions)
+        print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제, 순서는 랜덤)")
         correct = 0
-        for index, quiz in enumerate(self.quizzes, start=1):
+        for index, quiz in enumerate(questions, start=1):
             print()
             print(SUB_LINE)
             print(f"[문제 {index}]")
