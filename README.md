@@ -135,8 +135,9 @@ VS Code에서 `python-study` 폴더를 열고 `quiz.py`를 작성했습니다.
 
 #### 7. Git 커밋 기록 확인
 
-`git log --oneline` 명령어로 지금까지 생성한
-3개의 커밋을 확인했습니다.
+`git log --oneline` 명령어로 이 시점까지 생성한
+3개의 커밋을 확인했습니다. (개발 초기의 기록이며,
+최종 커밋 수는 아래 **Git 커밋 기록**에서 확인할 수 있습니다.)
 
 세 번째 커밋 `7257b23`이 GitHub의
 `origin/main`에도 반영된 것을 확인했습니다.
@@ -305,7 +306,7 @@ Python에서 문자열 자료형의 이름은?
 - [x] `state.json`으로 퀴즈와 최고 점수 저장 및 불러오기
 - [x] 기본 퀴즈 5개 제공 (파일이 없을 때 사용)
 - [x] `Quiz`, `QuizGame` 클래스로 역할 분리
-- [x] (보너스) 랜덤 출제: `random.shuffle()`로 퀴즈를 풀 때마다 문제 순서를 섞음 (목록의 원래 순서는 유지)
+- [x] (보너스) 랜덤 출제: 퀴즈를 풀 때마다 문제 순서를 섞음
 
 ### 입력 및 예외 처리
 
@@ -357,6 +358,22 @@ python-study/
 | `QuizGame.show_score()` | 최고 점수 출력 |
 | `QuizGame.run()` | 메뉴 반복 실행 |
 
+### 요구사항 변경 시 점검 대상
+
+요구사항이 바뀌면 아래 표에서 해당 변경을 찾아 파일과 메서드를 확인합니다.
+모든 코드는 `quiz.py` 한 파일에 있고, 문서는 `README.md`에 있습니다.
+
+| 변경 요구 | 점검할 메서드 / 위치 |
+|---|---|
+| 선택지 개수 변경 (4개 → N개) | `Quiz.from_dict()`(선택지 개수, 정답 범위 검사), `QuizGame.add_quiz()`(선택지 입력 반복, 정답 범위), `QuizGame.play()`(정답 입력 범위), `default_quizzes()`, README 스키마 |
+| 퀴즈에 속성 추가 (힌트, 분류 등) | `Quiz.__init__()`, `Quiz.to_dict()`, `Quiz.from_dict()`, `Quiz.show()`, `QuizGame.add_quiz()`, `default_quizzes()`, `state.json` 스키마 |
+| 점수 계산 방식 변경 | `QuizGame.play()`(점수 계산, 최고 점수 갱신), `QuizGame.show_score()`, `QuizGame.best_score_text()`, `QuizGame.load()`/`save()`(`best_*` 값) |
+| 저장 방식 변경 (JSON → DB 등) | `STATE_FILE`, `QuizGame.load()`, `QuizGame.save()` (다른 메서드는 그대로 사용 가능) |
+| 메뉴 항목 추가, 변경 | `QuizGame.show_menu()`, `QuizGame.run()`(메뉴 번호 범위와 분기), 새 기능 메서드 |
+| 입력 검증 규칙 변경 | `QuizGame.read_number()`, `QuizGame.read_text()` |
+| 기본 퀴즈 내용 변경 | `default_quizzes()` |
+| 데이터 파일 위치, 이름 변경 | `STATE_FILE`, `.gitignore`, README 9번 항목 |
+
 
 
 ## 9. 데이터 파일 설명
@@ -404,6 +421,29 @@ Python의 `dict`, `list`와 모양이 비슷해서 읽고 쓰기 쉽습니다.
 
 - 파일이 없으면(첫 실행) 기본 퀴즈 5개로 시작합니다.
 - 파일이 손상되었거나 형식이 맞지 않으면 안내 메시지를 출력하고 기본 퀴즈로 초기화합니다.
+
+### 한계와 대용량 데이터 고려사항
+
+이 프로젝트는 퀴즈가 수십 개 수준인 학습용 프로그램이라 JSON 파일 하나로 충분합니다.
+다만 데이터가 아주 많아지면 다음 한계가 있습니다.
+
+- **전체를 읽고 전체를 다시 씁니다.** `load()`는 `json.load()`로 파일 전체를 메모리에 올리고,
+  `save()`는 퀴즈를 하나만 추가해도 `json.dump()`로 파일 전체를 다시 씁니다.
+  퀴즈가 N개이면 읽기, 쓰기 시간과 메모리 사용량이 N에 비례해 커집니다.
+- **저장 도중 종료되면 파일이 손상될 수 있습니다.** 현재는 손상된 파일을 감지하면 기본 퀴즈로 초기화합니다.
+- **동시에 여러 곳에서 쓰면 덮어쓸 수 있습니다.** 이 프로그램은 한 번에 하나만 실행하는 것을 전제로 합니다.
+
+데이터가 수만 건 이상으로 커지면 다음 방법을 고려할 수 있습니다.
+
+| 방법 | 설명 |
+|---|---|
+| DB로 전환 | 표준 라이브러리 `sqlite3` 등을 사용해 필요한 퀴즈만 조회하고 추가, 삭제합니다. 전체 파일을 다시 쓰지 않아도 됩니다. |
+| 스트리밍 처리 | JSON Lines(`.jsonl`, 한 줄에 퀴즈 하나)로 저장해 한 줄씩 읽고, 새 퀴즈는 파일 끝에 추가합니다. 전체를 메모리에 올리지 않습니다. |
+| 필요한 만큼만 읽기 | 퀴즈를 풀 때 한 번에 N문제만 불러오는 방식(페이지 단위 조회)으로 바꿉니다. |
+| 안전한 저장 | 임시 파일에 먼저 쓴 뒤 `os.replace()`로 교체해, 저장 중 종료되어도 기존 파일이 남게 합니다. |
+
+저장 방식을 바꿀 때 수정할 부분은 위 **요구사항 변경 시 점검 대상** 표의
+"저장 방식 변경"을 참고합니다. (`load()`, `save()`만 바꾸면 됩니다.)
 
 
 ## 10. 실행 화면 및 개발 과정
@@ -457,6 +497,30 @@ Python 퀴즈 게임의 개발 과정과 실행 결과는
 `feature/play-quiz` 브랜치를 만들어 작업한 뒤 `main`에 병합했습니다.
 
 ![Git 커밋 그래프](docs/screenshots/git_log_graph.png)
+
+원격 저장소(GitHub)의 최종 커밋 수는 **30개 이상**으로,
+과제의 최소 요구인 10개 이상을 충족합니다.
+(`git rev-list --count HEAD`로 확인할 수 있습니다.)
+
+기능 단위로 나눈 주요 커밋은 다음과 같습니다.
+
+| 단계 | 커밋 | 메시지 |
+|---|---|---|
+| 저장소 초기화 | `93e2df3` | `Chore: initialize Python quiz project` |
+| 메뉴 구현 | `7257b23` | `Feat: add quiz menu` |
+| 입력 검증, 메뉴 반복 | `e534f9f` | `Feat: add input validation and menu loop` |
+| `Quiz` 클래스 | `5cadad3` | `Feat: add Quiz class` |
+| 기본 퀴즈 데이터 | `70963a9` | `Feat: add default quiz data` |
+| 퀴즈 풀기 (`feature/play-quiz` 브랜치) | `36df05f` | `Feat: add quiz play` |
+| 브랜치 병합 | `1cfddf7` | `Merge branch 'feature/play-quiz'` |
+| 퀴즈 추가 | `4bd1fac` | `Feat: add quiz registration` |
+| 퀴즈 목록 | `633c94b` | `Feat: add quiz list` |
+| 점수 확인 | `3a3fa2c` | `Feat: add best score check` |
+| `QuizGame` 클래스 정리 | `7981cd3` | `Refactor: organize game logic into QuizGame class` |
+| `state.json` 저장/불러오기 | `7c35eea` | `Feat: save and load data with state.json` |
+| README, 스크린샷 | `66428f1`, `da3e418` | `Docs: ...` |
+| 보너스: 랜덤 출제 | `ea7f760` | `Feat: add random quiz order` |
+| clone, pull 실습 | `16c2ec0`, `8bea294` | `Docs: ...` |
 
 #### Git clone / pull 실습
 
