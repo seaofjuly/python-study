@@ -323,7 +323,7 @@ Python에서 문자열 자료형의 이름은?
 ```text
 python-study/
 ├── quiz.py
-├── state.json        (프로그램 실행 시 자동 생성)
+├── state.json        (퀴즈와 최고 점수 저장 파일, 저장소에 포함)
 ├── README.md
 ├── MISSION.md
 ├── .gitignore
@@ -336,7 +336,7 @@ python-study/
 | 이름 | 역할 |
 |---|---|
 | `quiz.py` | 퀴즈 게임 실행 코드 (`Quiz`, `QuizGame` 클래스) |
-| `state.json` | 퀴즈 목록과 최고 점수 저장 파일 (UTF-8) |
+| `state.json` | 퀴즈 목록과 최고 점수 저장 파일 (UTF-8, 저장소에 포함) |
 | `state.json.bak` | 손상된 `state.json`의 백업 (손상이 감지될 때만 생성) |
 | `README.md` | 프로젝트 설명과 개발 학습 기록 |
 | `MISSION.md` | 미션 요구 사항 정리 |
@@ -395,6 +395,7 @@ python-study/
 - **역할:** 프로그램을 종료해도 퀴즈와 최고 점수가 유지되도록 저장
 - **인코딩:** UTF-8
 - **생성:** 퀴즈를 추가하거나 최고 점수가 갱신될 때, 또는 종료할 때 자동으로 저장됩니다.
+- **저장소:** 실제 저장 결과를 확인할 수 있도록 `state.json`을 저장소에 포함했습니다. (게임을 하면 내용이 바뀝니다.)
 
 JSON은 데이터를 일정한 형식으로 저장하는 텍스트 형식입니다.
 Python의 `dict`, `list`와 모양이 비슷해서 읽고 쓰기 쉽습니다.
